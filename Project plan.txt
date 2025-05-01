@@ -1,0 +1,41 @@
+Project plan
+
+1. create a database with some database 
+  - idea 1 - electricity meter readings
+      calcs on this: aggregation monthly
+    Create - take in readings and date 
+        - must check that date is not in future / reading greater than last
+
+    read - get totals - monthly / yearly
+
+    delete - delete a selected reading... 
+
+    Update - update a selected reading
+
+    return a reading or a monthly elec consumption for a given year / month
+
+
+2. outside data - 
+    perhaps get some data from met.ie or data on elec consumption / renewable energy gen.. TBC 
+  
+
+3. Front end / visualisations 
+   - front page
+       - first pass - data entry / CRUD ops
+
+
+    others:
+   - do plots of monthly usage
+   - do plots of weather / outside data plots 
+   - return readings between certain dates
+   -  
+
+
+5. Hosting - on Azure ?? have student account
+
+
+
+Additionals:
+
+Bootstrap
+ticketing?
