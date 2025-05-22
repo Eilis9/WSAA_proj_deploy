@@ -1,7 +1,6 @@
 # Getting some met data from the met api
 import json
 from pprint import pprint
-import pandas as pd
 import requests
 
 url = "https://prodapi.metweb.ie/monthly-data/Athenry"
