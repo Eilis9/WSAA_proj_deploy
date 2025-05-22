@@ -25,12 +25,64 @@
 
 <div class="container pt-5">
   <h2>Using the API</h2>
-  <p>To use the API to get json data, you can make GET requests to the following endpoints:</p>
+  <p>To use the API to get json data, you can make the requests to the endpoints listed below:</p>
   <ul>
-    <li><a href="/elec/units">Get all readings</a></li>
-    <li><a href="/elec/find/?year=2025&month=1 "> Gets a reading corresponding to a given year and month</a></li>
-    <li><a href="/elec/cost_codes">Get all cost codes</a></li>
-
+<table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Endpoint</th>
+        <th>Method</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>/elec/units</td>
+        <td>GET</td>
+        <td>Get all electricity readings with associated cost code details</td>
+      </tr>
+      <tr>
+        <td>/elec</td>
+        <td>POST</td>
+        <td>Create a new reading (JSON object containing 'year', 'month', 'units', 'cost_code')</td>
+      </tr>
+      <tr>
+        <td>/elec/&lt;int:id&gt;</td>
+        <td>PUT</td>
+        <td>Update a reading (JSON object containing 'id', 'year', 'month', 'units', 'cost_code')</td>
+      </tr>
+      <tr>
+        <td>/elec/&lt;int:id&gt;</td>
+        <td>DELETE</td>
+        <td>Delete a reading</td>
+      </tr>
+      <tr>
+        <td>/elec/find</td>
+        <td>GET</td>
+        <td>Find a reading by year and month (Query parameters: 'year', 'month')</td>
+      </tr>
+      <tr>
+        <td>/elec/cost_codes</td>
+        <td>GET</td>
+        <td>Get all cost codes</td>
+      </tr>
+      <tr>
+        <td>/elec/cost_codes</td>
+        <td>POST</td>
+        <td>Create a new cost code (JSON object containing 'cost_code', 's_charge', 'unit_cost', 'vat_pc', 'supplier')</td>
+      </tr>
+      <tr>
+        <td>/elec/cost_codes/&lt;string:cost_code&gt;</td>
+        <td>PUT</td>
+        <td>Update a cost code (JSON object containing 'id', 'cost_code', 's_charge', 'unit_cost', 'vat_pc', 'supplier')</td>
+      </tr>
+      <tr>
+        <td>/elec/cost_codes/&lt;string:cost_code&gt;</td>
+        <td>DELETE</td>
+        <td>Delete a cost code</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 
