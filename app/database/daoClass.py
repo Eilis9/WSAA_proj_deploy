@@ -100,10 +100,10 @@ class dbDAO:
         # sql_1 = "SELECT * FROM elec.unit ORDER BY year ASC, month ASC"
         # Joins the data from the 2 database tables to get the reading and cost info
         sql_1= """
-        SELECT elec.unit.id, elec.unit.year, elec.unit.month, elec.unit.unit, 
-        elec.cost.cost_code, elec.cost.supplier, round(elec.cost.s_charge, 3) as s_charge, round(elec.cost.unit_cost, 3) as unit_cost from elec.unit
+        SELECT unit.id, unit.year, unit.month, unit.unit, 
+        cost.cost_code, cost.supplier, round(cost.s_charge, 3) as s_charge, round(cost.unit_cost, 3) as unit_cost from elec.unit
         INNER JOIN elec.cost 
-        ON elec.cost.cost_code = elec.unit.cost_code
+        ON cost.cost_code = unit.cost_code
         ORDER by year ASC, month ASC;"""
         cursor.execute(sql_1)
         results_1 = cursor.fetchall()
@@ -130,8 +130,8 @@ class dbDAO:
         # sql_1 = "SELECT * FROM elec.unit ORDER BY year ASC, month ASC"
         # Joins the data from the 2 database tables to get the reading and cost info
         sql_1= """
-        SELECT elec.cost.cost_code, round(elec.cost.s_charge, 3) as s_charge, round(elec.cost.unit_cost, 3) as unit_cost, 
-        elec.cost.vat_pc, elec.cost.supplier from elec.cost;"""
+        SELECT cost.cost_code, round(cost.s_charge, 3) as s_charge, round(cost.unit_cost, 3) as unit_cost, 
+        cost.vat_pc, cost.supplier from elec.cost;"""
         cursor.execute(sql_1)
         results_1 = cursor.fetchall()
         # Get column names from the cursor description
@@ -253,12 +253,12 @@ class dbDAO:
         
     def calcCost(self, reading):
         cursor = self.getCursor()
-        sql = """SELECT elec.unit.year, elec.unit.month, elec.unit.unit, 
-        elec.cost.cost_code, elec.cost.s_charge, elec.cost.unit_cost, elec.cost.vat_pc from elec.unit
+        sql = """SELECT unit.year, unit.month, unit.unit, 
+        cost.cost_code, cost.s_charge, cost.unit_cost, cost.vat_pc from elec.unit
         INNER JOIN elec.cost 
-        ON elec.cost.cost_code = elec.unit.cost_code
-        WHERE (elec.unit.year>%s OR (elec.unit.year = %s and month>=%s ))
-        AND (elec.unit.year<%s OR (elec.unit.year = %s and month<=%s ))"""
+        ON cost.cost_code = unit.cost_code
+        WHERE (unit.year>%s OR (unit.year = %s and month>=%s ))
+        AND (unit.year<%s OR (unit.year = %s and month<=%s ))"""
         year_start = reading.get("year_start")
         print("in dao", year_start)
         month_start = reading.get("month_start")
