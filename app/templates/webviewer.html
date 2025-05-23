@@ -236,6 +236,10 @@
         function populateFormWithReading(reading){
        		var form = document.getElementById('createUpdateForm')
         	form.querySelector('input[name="id"]').disabled = true
+            
+            form.querySelector('input[name="year"]').disabled = true
+            form.querySelector('input[name="month"]').disabled = true
+
 
        		form.querySelector('input[name="id"]').value  = reading.id
        		form.querySelector('input[name="year"]').value= reading.year
