@@ -33,7 +33,7 @@ class dbDAO:
     def check_if_existing(self, year, month):
         results = []
         cursor = self.getCursor()
-        sql = "SELECT * FROM elec.unit WHERE year = %s AND month = %s"
+        sql = "SELECT * FROM unit WHERE year = %s AND month = %s"
      
         try:
             cursor.execute(sql, (year, month))
@@ -76,7 +76,7 @@ class dbDAO:
 
         else:
             try:
-                sql = "INSERT INTO elec.unit (year, month, unit, cost_code) VALUES (%s, %s, %s, %s)"
+                sql = "INSERT INTO unit (year, month, unit, cost_code) VALUES (%s, %s, %s, %s)"
                 values = (reading.get("year"), reading.get("month"), reading.get("unit"), reading.get("cost_code"))
                 cursor = self.getCursor()
                 cursor.execute(sql, values)
@@ -97,13 +97,13 @@ class dbDAO:
     def getAll(self):
         cursor = self.getCursor()
         # elec unit table
-        # sql_1 = "SELECT * FROM elec.unit ORDER BY year ASC, month ASC"
+        # sql_1 = "SELECT * FROM unit ORDER BY year ASC, month ASC"
         # Joins the data from the 2 database tables to get the reading and cost info
         sql_1= """
-        SELECT elec.unit.id, elec.unit.year, elec.unit.month, elec.unit.unit, 
-        elec.cost.cost_code, elec.cost.supplier, round(elec.cost.s_charge, 3) as s_charge, round(elec.cost.unit_cost, 3) as unit_cost from elec.unit
-        INNER JOIN elec.cost 
-        ON elec.cost.cost_code = elec.unit.cost_code
+        SELECT unit.id, unit.year, unit.month, unit.unit, 
+        cost.cost_code, cost.supplier, round(cost.s_charge, 3) as s_charge, round(cost.unit_cost, 3) as unit_cost from unit
+        INNER JOIN cost 
+        ON cost.cost_code = unit.cost_code
         ORDER by year ASC, month ASC;"""
         cursor.execute(sql_1)
         results_1 = cursor.fetchall()
@@ -112,7 +112,7 @@ class dbDAO:
         # Convert each row into a dictionary
         json_results = [dict(zip(column_names, row)) for row in results_1]
         # cost table
-        #sql_2 = "SELECT * FROM elec.cost"
+        #sql_2 = "SELECT * FROM cost"
         #cursor.execute(sql_2)
         #results_2 = cursor.fetchall()
         self.closeAll()
@@ -127,11 +127,11 @@ class dbDAO:
     def getAllCostCode(self):
         cursor = self.getCursor()
         # elec unit table
-        # sql_1 = "SELECT * FROM elec.unit ORDER BY year ASC, month ASC"
+        # sql_1 = "SELECT * FROM unit ORDER BY year ASC, month ASC"
         # Joins the data from the 2 database tables to get the reading and cost info
         sql_1= """
-        SELECT elec.cost.cost_code, round(elec.cost.s_charge, 3) as s_charge, round(elec.cost.unit_cost, 3) as unit_cost, 
-        elec.cost.vat_pc, elec.cost.supplier from elec.cost;"""
+        SELECT cost.cost_code, round(cost.s_charge, 3) as s_charge, round(cost.unit_cost, 3) as unit_cost, 
+        cost.vat_pc, cost.supplier from cost;"""
         cursor.execute(sql_1)
         results_1 = cursor.fetchall()
         # Get column names from the cursor description
@@ -139,7 +139,7 @@ class dbDAO:
         # Convert each row into a dictionary
         json_results = [dict(zip(column_names, row)) for row in results_1]
         # cost table
-        #sql_2 = "SELECT * FROM elec.cost"
+        #sql_2 = "SELECT * FROM cost"
         #cursor.execute(sql_2)
         #results_2 = cursor.fetchall()
         self.closeAll()
@@ -149,7 +149,7 @@ class dbDAO:
     # Create a new cost code
     def createCode(self, reading):
         cursor = self.getCursor()
-        sql = "INSERT INTO elec.cost (cost_code, s_charge, unit_cost, vat_pc, supplier) VALUES (%s, %s, %s, %s, %s)"
+        sql = "INSERT INTO cost (cost_code, s_charge, unit_cost, vat_pc, supplier) VALUES (%s, %s, %s, %s, %s)"
         values = (reading.get("cost_code"), reading.get("s_charge"), reading.get("unit_cost"), reading.get("vat_pc"), reading.get("supplier"))
         print(f"Debug: SQL={sql}, values={values}")  # Debugging
         cursor.execute(sql, values)
@@ -164,7 +164,7 @@ class dbDAO:
     
     def findbyid(self, year, month):
         cursor = self.getCursor()  
-        sql = "SELECT * FROM elec.unit WHERE year = %s AND month = %s"
+        sql = "SELECT * FROM unit WHERE year = %s AND month = %s"
         cursor.execute(sql, (year, month))
         results = cursor.fetchall()
         self.closeAll()        
@@ -172,7 +172,7 @@ class dbDAO:
     
     def findbyyear(self, year):
         cursor = self.getCursor()  
-        sql = "SELECT unit, month FROM elec.unit WHERE year = %s"
+        sql = "SELECT unit, month FROM unit WHERE year = %s"
         cursor.execute(sql, (year,))
         results = cursor.fetchall()
         self.closeAll()        
@@ -198,7 +198,7 @@ class dbDAO:
         else:
             try:        
                 cursor = self.getCursor()  # Get the database cursor   
-                sql = "update elec.unit set year=%s, month=%s, unit=%s, cost_code=%s where id=%s"
+                sql = "update unit set year=%s, month=%s, unit=%s, cost_code=%s where id=%s"
                 values = (reading.get("year"), reading.get("month"), reading.get("unit"), reading.get("cost_code"), id)
                 cursor.execute(sql, values)
                 self.connection.commit()
@@ -220,7 +220,7 @@ class dbDAO:
         
         cursor = self.getCursor()  # Get the database cursor
         
-        sql = "update elec.cost set s_charge=%s, unit_cost=%s, vat_pc=%s, supplier=%s where cost_code=%s"
+        sql = "update cost set s_charge=%s, unit_cost=%s, vat_pc=%s, supplier=%s where cost_code=%s"
         values = (reading.get("s_charge"), reading.get("unit_cost"), reading.get("vat_pc"), reading.get("supplier"), reading.get("cost_code"))
         print(f"Debug: SQL={sql}, values={values}")  # Debugging
         
@@ -233,7 +233,7 @@ class dbDAO:
     def delete(self, id):
         print(f"Debug: delete id={id}")  # Debugging
         cursor = self.getCursor()  
-        sql = "DELETE from elec.unit WHERE id = %s"
+        sql = "DELETE from unit WHERE id = %s"
         values = (id,)
         cursor.execute(sql, values)
         self.connection.commit()
@@ -244,7 +244,7 @@ class dbDAO:
     def deleteCostCode(self, cost_code):
         print(f"Debug: delete id={cost_code}")  # Debugging
         cursor = self.getCursor()  
-        sql = "DELETE from elec.cost WHERE cost_code = %s"
+        sql = "DELETE from cost WHERE cost_code = %s"
         values = (cost_code,)
         cursor.execute(sql, values)
         self.connection.commit()
@@ -253,12 +253,12 @@ class dbDAO:
         
     def calcCost(self, reading):
         cursor = self.getCursor()
-        sql = """SELECT elec.unit.year, elec.unit.month, elec.unit.unit, 
-        elec.cost.cost_code, elec.cost.s_charge, elec.cost.unit_cost, elec.cost.vat_pc from elec.unit
-        INNER JOIN elec.cost 
-        ON elec.cost.cost_code = elec.unit.cost_code
-        WHERE (elec.unit.year>%s OR (elec.unit.year = %s and month>=%s ))
-        AND (elec.unit.year<%s OR (elec.unit.year = %s and month<=%s ))"""
+        sql = """SELECT unit.year, unit.month, unit.unit, 
+        cost.cost_code, cost.s_charge, cost.unit_cost, cost.vat_pc from unit
+        INNER JOIN cost 
+        ON cost.cost_code = unit.cost_code
+        WHERE (unit.year>%s OR (unit.year = %s and month>=%s ))
+        AND (unit.year<%s OR (unit.year = %s and month<=%s ))"""
         year_start = reading.get("year_start")
         print("in dao", year_start)
         month_start = reading.get("month_start")
